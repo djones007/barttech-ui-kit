@@ -42,7 +42,11 @@ opted in.
 
 1. `git submodule add <repo url> src/ui-kit`
 2. Install the peers: `radix-ui class-variance-authority clsx tailwind-merge tw-animate-css`.
-3. Global stylesheet, in this order:
+3. **If the app already defines the standard shadcn tokens** (`--primary`, `--muted`, `--border`, … in
+   any colour format), skip `theme.css` — the components read those tokens as they are, and
+   importing this file on top would override them in a different format and break the app's
+   existing components. Just make Tailwind scan the submodule (`@source "../ui-kit";`).
+   Otherwise, global stylesheet, in this order:
    `@import "tailwindcss"; @import "tw-animate-css"; @import "../ui-kit/theme.css";`
    (path relative to the stylesheet). Tailwind v4 scans the submodule automatically because it
    is inside the project; if the app limits sources, add `@source "../ui-kit";`.

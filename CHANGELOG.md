@@ -2,6 +2,11 @@
 
 All notable changes to this repository. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-10-24b] — Docs: apps with existing tokens skip theme.css
+
+### Changed
+- CLAUDE.md: an app that already defines the standard tokens should not import `theme.css` (it would override them in a different colour format).
+
 ## [2026-10-24] — First release
 
 ### Added
