@@ -1,0 +1,41 @@
+name: CI
+
+# This kit is mounted as a git submodule by the apps that use it and transpiled by their builds.
+# It gates ITSELF: a component vendored into several repos and checked only as a side effect of
+# being vendored means one error reddens several builds at once, against files none of them may
+# edit (a fix made in a consumer's copy is discarded on the next pointer bump).
+# One job: every job is billed as a full minute (public repo, but the pattern stays consistent).
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+  pull_request:
+
+env:
+  # Pinned gate-script source (same pin and reasoning as the sibling shared UI repo): automatic
+  # propagation of executable code IS the vulnerability, so a script fix is adopted by bumping this.
+  WEB_CORE_REF: 7872a16c14fe96365559a5e61cfb1842564c8c99
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - if: always()
+        run: npm run typecheck
+      - name: No third-party font CDN loaded at runtime
+        if: always()
+        run: |
+          curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors https://raw.githubusercontent.com/djones007/barttech-web-core/${WEB_CORE_REF}/scripts/check-third-party-fonts.mjs -o /tmp/check-third-party-fonts.mjs
+          node /tmp/check-third-party-fonts.mjs
