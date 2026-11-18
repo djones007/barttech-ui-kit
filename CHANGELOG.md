@@ -2,6 +2,11 @@
 
 All notable changes to this repository. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-11-18] — Dependencies: minimatch bumped to 11.0.7+ (GHSA-cf2h-pxjq-68xw)
+
+### Changed
+- `overrides.minimatch` raised to `^11.0.7` and lockfile refreshed (resolves 11.0.9). Dev-only path (eslint / typescript-estree / glob), Low severity. No runtime change.
+
 ## [2026-10-24b] — Docs: apps with existing tokens skip theme.css
 
 ### Changed
